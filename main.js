@@ -22,8 +22,8 @@ function loadSelectors(){
 
 function createSelector(name){
     const selector = document.createElement("select"); 
-    selector.name = `${name}`;
-    selector.id = `${name}`;
+    selector.name = name;
+    selector.id = name;
     selector.addEventListener("change", function(){
         const index = selector.selectedIndex;
         document.getElementById(keyId).selectedIndex = index;
