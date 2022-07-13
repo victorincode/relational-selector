@@ -8,29 +8,37 @@ const state = {
     f: "forEach",
     g: "gesdrwesf",
 };
+const keyId = "key-data";
+const valueId = "value-id";
 
-function loadSelectors() {
-    const formId = "form-selector";
-    let formBody = document.getElementById(formId);
-    let keyData = `<select name="key-data" id="key-data" onchange="selectedItem('key')">`;
-    let valueData = `<select name="value-data" id="value-data" onchange="selectedItem('value')">`;
-    for(let key in state){
-        keyData += `<option value="${key}">${key}</option>`;
-        valueData += `<option value="${state[key]}">${state[key]}</option>`;
-    }
-    formBody.innerHTML += keyData;
-    formBody.innerHTML += valueData;
-    formBody.innerHTML += "</select>";
+function loadSelectors(){
+    const divContainer = document.createElement("div");
+    document.body.append(divContainer);
+    const keyData = createSelector(keyId);
+    const valueData = createSelector(valueId);
+    divContainer.append(keyData);
+    divContainer.append(valueData);
 }
 
-function selectedItem(value){
-    const index = document.getElementById(`${value}-data`).selectedIndex;
-    switch(value){
-        case 'key':
-            document.getElementById(`value-data`).selectedIndex = index;
-            break;
-        case 'value':
-            document.getElementById(`key-data`).selectedIndex = index;
-            break;
+function createSelector(name){
+    const selector = document.createElement("select"); 
+    selector.name = `${name}`;
+    selector.id = `${name}`;
+    selector.addEventListener("change", function(){
+        const index = selector.selectedIndex;
+        document.getElementById(keyId).selectedIndex = index;
+        document.getElementById(valueId).selectedIndex = index;
+    });
+    pushContentData(selector);
+    return selector;
+}
+
+function pushContentData(selector){
+    for(const key in state){
+        const option = document.createElement("option");
+        option.text = (selector.name === keyId) ? key : state[key];
+        option.value = (selector.name === keyId) ? key : state[key];
+        selector.append(option);
     }
 }
+
